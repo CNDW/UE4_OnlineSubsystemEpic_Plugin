@@ -1,0 +1,42 @@
+{
+	"FileVersion" : 3,
+	"Version" : 1,
+	"VersionName" : "1.0",
+	"FriendlyName" : "Epic Online Subsystem",
+	"Description" : "Online Subsystem Plugin for integrating the Epic Online Services into UE4.",
+	"Category" : "Online",
+	"CreatedBy" : "Travis Peterson",
+	"CreatedByURL" : "",
+	"DocsURL" : "",
+	"MarketplaceURL" : "",
+	"SupportURL" : "",
+	"EngineVersion" : "4.25.0",
+	"CanContainContent" : true,
+	"IsBetaVersion" : true,
+	"Installed" : false,
+	"Modules" :
+	[
+		{
+			"Name": "OnlineSubsystemEpic",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms":
+			[
+				"Win64",
+				"Win32",
+				"Linux",
+				"Mac"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "OnlineSubsystem",
+			"Enabled": true
+		},
+		{
+			"Name": "OnlineSubsystemUtils",
+			"Enabled": true
+		}
+	]
+}
