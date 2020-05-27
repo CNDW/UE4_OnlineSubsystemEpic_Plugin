@@ -6,27 +6,8 @@ public class OnlineSubsystemEpic : ModuleRules
 {
     public OnlineSubsystemEpic( ReadOnlyTargetRules Target ) : base( Target )
     {
-        PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
         PublicDefinitions.Add( "ONLINESUBSYSTEMEPIC_PACKAGE=1" );
-
-        if( Target.Configuration != UnrealTargetConfiguration.Shipping )
-        {
-            OptimizeCode = CodeOptimization.Never;
-        }
-
-        PublicIncludePaths.AddRange(
-            new string[] {
-                Path.Combine( ModuleDirectory, "Public" )
-            }
-            );
-
-
-        PrivateIncludePaths.AddRange(
-            new string[] {
-                Path.Combine( ModuleDirectory, "Private" )
-            }
-            );
-
+        PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(
             new string[]
@@ -34,7 +15,7 @@ public class OnlineSubsystemEpic : ModuleRules
                 "OnlineSubsystemUtils",
                 "EOSSDK"
             }
-            );
+        );
 
 
         PrivateDependencyModuleNames.AddRange(
@@ -52,14 +33,6 @@ public class OnlineSubsystemEpic : ModuleRules
                 "PacketHandler",
                 "Projects",
             }
-            );
-
-
-        DynamicallyLoadedModuleNames.AddRange(
-            new string[]
-            {
-				// ... add any modules that your module loads dynamically here ...
-			}
-            );
+        );
     }
 }

@@ -41,7 +41,7 @@ public class EOSSDK : ModuleRules
             PublicDelayLoadDLLs.Add( "EOSSDK-Win64-Shipping.dll" );
         }
 
-        if( Target.Platform == UnrealTargetPlatform.Win32 )
+        else if( Target.Platform == UnrealTargetPlatform.Win32 )
         {
             // Include headers
             PublicIncludePaths.Add( Path.Combine( BaseDirectory, "Include" ) );
