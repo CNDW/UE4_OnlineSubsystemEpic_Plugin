@@ -174,9 +174,11 @@ bool FOnlineSubsystemEpic::InitializeSDK()
 	SDKOptions.Reserved = nullptr;
 	SDKOptions.SystemInitializeOptions = nullptr;
 
+	UE_LOG_ONLINE(Warning, TEXT("EOS SDK Initialization: Started..."));
+	
 	EOS_EResult InitResult = EOS_Initialize(&SDKOptions);
 
-	if(InitResult != EOS_EResult::EOS_Success)
+	if(InitResult != EOS_EResult::EOS_Success && InitResult != EOS_EResult::EOS_AlreadyConfigured)
 	{
 		UE_LOG_ONLINE(Warning, TEXT("EOS SDK Initialization: FAILED! - %s"), ANSI_TO_TCHAR(EOS_EResult_ToString(InitResult)));
 		return false;

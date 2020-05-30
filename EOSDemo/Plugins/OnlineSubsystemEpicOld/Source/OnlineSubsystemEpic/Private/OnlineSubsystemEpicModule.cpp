@@ -43,25 +43,24 @@ public:
 
 	virtual IOnlineSubsystemPtr CreateSubsystem(FName InstanceName)
 	{
-		if(!Singleton.IsValid())
+		FOnlineSubsystemEpicPtr OnlineSub = MakeShared<FOnlineSubsystemEpic, ESPMode::ThreadSafe>(InstanceName);
+		if (OnlineSub->IsEnabled())
 		{
-			Singleton = MakeShared<FOnlineSubsystemEpic, ESPMode::ThreadSafe>(InstanceName);
-			if(Singleton->IsEnabled())
+			if (!OnlineSub->Init())
 			{
-				if(!Singleton->Init())
-				{
-					UE_LOG_ONLINE(Warning, TEXT("EOS API failed to initialize!"));
-					DestroySubsystem();
-				}
+				UE_LOG_ONLINE(Warning, TEXT("OnlineSubsystemEpic failed to initialize!"));
+				OnlineSub->Shutdown();
+				OnlineSub = nullptr;
 			}
-			else
-			{
-				UE_LOG_ONLINE(Warning, TEXT("EOS API disabled!"));
-				DestroySubsystem();
-			}
-
-			return Singleton;
 		}
+		else
+		{
+			UE_LOG_ONLINE(Warning, TEXT("OnlineSubsystemEpic is disabled!"));
+			OnlineSub->Shutdown();
+			OnlineSub = nullptr;
+		}
+
+		return OnlineSub;
 
 		UE_LOG_ONLINE(Warning, TEXT("Can't create more than one instance of EOS online subsystem!"));
 		return nullptr;
