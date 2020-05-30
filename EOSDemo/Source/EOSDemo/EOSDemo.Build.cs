@@ -8,7 +8,14 @@ public class EOSDemo : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { 
+            "Core", 
+            "CoreUObject", 
+            "Engine", 
+            "InputCore",
+            "OnlineSubsystem",
+            "OnlineSubsystemEpic"
+        });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

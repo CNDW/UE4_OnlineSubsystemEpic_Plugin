@@ -14,4 +14,10 @@ class EOSDEMO_API AEOSDemoGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure, category = OnlineSubsystem)
+		FString GetCurrentSubsystem();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, category = OnlineSubsystem)
+		bool IsEpicSubsystemLoaded();
 };

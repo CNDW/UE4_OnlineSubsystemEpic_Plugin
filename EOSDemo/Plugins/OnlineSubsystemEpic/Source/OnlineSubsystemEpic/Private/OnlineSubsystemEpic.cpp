@@ -1,4 +1,7 @@
 #include "OnlineSubsystemEpic.h"
+#include "Core.h"
+
+#include "eos_sdk.h"
 
 
 bool FOnlineSubsystemEpic::Init()
@@ -157,8 +160,8 @@ bool FOnlineSubsystemEpic::GetConfigOptions()
 
 bool FOnlineSubsystemEpic::InitializeSDK()
 {
-	std::string ProductNameStr = TCHAR_TO_UTF8(*ProductName);
-	std::string ProductVersionStr = TCHAR_TO_UTF8(*ProductVersion);
+	FTCHARToUTF8 ProductNameStr(*ProductName);
+	FTCHARToUTF8 ProductVersionStr(*ProductVersion);
 
 	// Init EOS SDK
 	EOS_InitializeOptions SDKOptions;
@@ -166,8 +169,8 @@ bool FOnlineSubsystemEpic::InitializeSDK()
 	SDKOptions.AllocateMemoryFunction = nullptr;
 	SDKOptions.ReallocateMemoryFunction = nullptr;
 	SDKOptions.ReleaseMemoryFunction = nullptr;
-	SDKOptions.ProductName = ProductNameStr.c_str();
-	SDKOptions.ProductVersion = ProductVersionStr.c_str();
+	SDKOptions.ProductName = ProductNameStr.Get();
+	SDKOptions.ProductVersion = ProductVersionStr.Get();
 	SDKOptions.Reserved = nullptr;
 	SDKOptions.SystemInitializeOptions = nullptr;
 
@@ -175,7 +178,7 @@ bool FOnlineSubsystemEpic::InitializeSDK()
 
 	if(InitResult != EOS_EResult::EOS_Success)
 	{
-		UE_LOG_ONLINE(Warning, TEXT("EOS SDK Initialization: FAILED!"));
+		UE_LOG_ONLINE(Warning, TEXT("EOS SDK Initialization: FAILED! - %s"), ANSI_TO_TCHAR(EOS_EResult_ToString(InitResult)));
 		return false;
 	}
 
@@ -193,8 +196,9 @@ bool FOnlineSubsystemEpic::CreatePlatformHandle()
 	PlatformOptions.EncryptionKey = nullptr;
 	PlatformOptions.OverrideCountryCode = nullptr;
 	PlatformOptions.OverrideLocaleCode = nullptr;
-	static std::string EncryptionKey(64, '1');
-	PlatformOptions.EncryptionKey = EncryptionKey.c_str();
+	// The EncryptionKey is a 64 ones
+	static const char EncryptionKey[65] = "1111111111111111111111111111111111111111111111111111111111111111";
+	PlatformOptions.EncryptionKey = EncryptionKey;
 	PlatformOptions.Flags = 0;
 
 	FString TempPath = FPaths::ConvertRelativePathToFull(FPaths::ProjectSavedDir() + "/Temp/");
@@ -209,37 +213,37 @@ bool FOnlineSubsystemEpic::CreatePlatformHandle()
 
 	PlatformOptions.CacheDirectory = TCHAR_TO_UTF8(*TempPath);
 
-	std::string ProductIdStr = TCHAR_TO_UTF8(*ProductId);
-	std::string SandboxIdStr = TCHAR_TO_UTF8(*SandboxId);
-	std::string DeploymentIdStr = TCHAR_TO_UTF8(*DeploymentId);
+	FTCHARToUTF8 ProductIdStr(*ProductId);
+	FTCHARToUTF8 SandboxIdStr(*SandboxId);
+	FTCHARToUTF8 DeploymentIdStr(*DeploymentId);
 
-	if(ProductIdStr.empty())
+	if(ProductIdStr.Length() == 0)
 	{
 		UE_LOG_ONLINE(Warning, TEXT("EOS SDK Product Id is invalid."));
 		return false;
 	}
 
-	if(SandboxIdStr.empty())
+	if(SandboxIdStr.Length() == 0)
 	{
 		UE_LOG_ONLINE(Warning, TEXT("EOS SDK Sandbox Id is invalid."));
 		return false;
 	}
 
-	if(DeploymentIdStr.empty())
+	if(DeploymentIdStr.Length() == 0)
 	{
 		UE_LOG_ONLINE(Warning, TEXT("EOS SDK Deployment Id is invalid."));
 		return false;
 	}
 
-	PlatformOptions.ProductId = ProductIdStr.c_str();
-	PlatformOptions.SandboxId = SandboxIdStr.c_str();
-	PlatformOptions.DeploymentId = DeploymentIdStr.c_str();
+	PlatformOptions.ProductId = ProductIdStr.Get();
+	PlatformOptions.SandboxId = SandboxIdStr.Get();
+	PlatformOptions.DeploymentId = DeploymentIdStr.Get();
 
-	std::string ClientIdStr = TCHAR_TO_UTF8(*ClientId);
-	std::string ClientSecretStr = TCHAR_TO_UTF8(*ClientSecret);
+	FTCHARToUTF8 ClientIdStr(*ClientId);
+	FTCHARToUTF8 ClientSecretStr(*ClientSecret);
 
-	PlatformOptions.ClientCredentials.ClientId = (ClientIdStr.empty()) ? nullptr : ClientIdStr.c_str();
-	PlatformOptions.ClientCredentials.ClientSecret = (ClientSecretStr.empty()) ? nullptr : ClientSecretStr.c_str();
+	PlatformOptions.ClientCredentials.ClientId = ClientIdStr.Get();
+	PlatformOptions.ClientCredentials.ClientSecret = ClientSecretStr.Get();
 
 	PlatformOptions.Reserved = NULL;
 
