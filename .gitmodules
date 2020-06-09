@@ -1,0 +1,3 @@
+[submodule "EOSDemo/Plugins/OnlineSubsystemEpic"]
+	path = EOSDemo/Plugins/OnlineSubsystemEpic
+	url = https://github.com/CNDW/OnlineSubsystemEpic.git

@@ -20,4 +20,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, category = OnlineSubsystem)
 		bool IsEpicSubsystemLoaded();
+
+	UFUNCTION(BlueprintCallable, category = OnlineSubsystem)
+		void Login();
 };
